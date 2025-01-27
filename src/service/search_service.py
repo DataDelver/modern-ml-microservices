@@ -1,5 +1,5 @@
 from client.met_client import MetClient
-from dto.search_result import SearchResult
+from shared.dto.search_result import SearchResult
 
 
 class SearchService:
