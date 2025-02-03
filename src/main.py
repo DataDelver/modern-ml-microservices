@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 
-from client.met_client import MetClient
+from provider.met_provider import MetProvider
 from service.search_service import SearchService
 
 app = FastAPI()
-search_service = SearchService(MetClient('https://collectionapi.metmuseum.org'))
+search_service = SearchService(MetProvider('https://collectionapi.metmuseum.org'))
 
 
 @app.get('/api/search')

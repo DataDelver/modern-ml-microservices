@@ -6,7 +6,7 @@ import httpx
 from shared.view.met_view import DepartmentResponse, ObjectResponse, ObjectsResponse, SearchResponse
 
 
-class MetClient:
+class MetProvider:
     """A client for the Metropolitan Museum of Art API.
 
     Args:

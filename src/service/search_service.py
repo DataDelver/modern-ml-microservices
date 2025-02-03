@@ -1,9 +1,9 @@
-from client.met_client import MetClient
+from provider.met_provider import MetProvider
 from shared.dto.search_result import SearchResult
 
 
 class SearchService:
-    def __init__(self, met_client: MetClient):
+    def __init__(self, met_client: MetProvider):
         self.met_client = met_client
 
     def search_by_title(self, title: str) -> SearchResult:

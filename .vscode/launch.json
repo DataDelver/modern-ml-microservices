@@ -16,7 +16,7 @@
             "jinja": true,
             "cwd": "${workspaceFolder}/src",
             "env": {
-                "PYTHONPATH": "${cwd}"
+                "PYTHONPATH": "${cwd}:${env:PYTHONPATH}"
             },
         }
     ]

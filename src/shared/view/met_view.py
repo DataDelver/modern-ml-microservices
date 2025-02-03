@@ -1,30 +1,30 @@
 from typing import Optional
 
 from pydantic import Field
-from shared.model import ModelBase
+from shared.data_model_base import ViewBase
 
 
-class SearchResponse(ModelBase):
+class SearchResponse(ViewBase):
     total: int
     object_ids: Optional[list[int]] = Field(alias='objectIDs')
 
 
-class Department(ModelBase):
+class Department(ViewBase):
     department_id: int
     display_name: str
 
 
-class DepartmentResponse(ModelBase):
+class DepartmentResponse(ViewBase):
     departments: list[Department]
 
 
-class ObjectResponse(ModelBase):
+class ObjectResponse(ViewBase):
     object_id: int = Field(alias='objectID')
     title: str
     primary_image: str
     additional_images: list[str]
 
 
-class ObjectsResponse(ModelBase):
+class ObjectsResponse(ViewBase):
     total: int
     object_ids: list[int] = Field(alias='objectIDs')

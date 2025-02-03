@@ -1,7 +1,7 @@
-from shared.model import ModelBase
+from shared.data_model_base import DTOBase
 
 
-class SearchResult(ModelBase):
+class SearchResult(DTOBase):
     object_id: int
     title: str
     primary_image: str
