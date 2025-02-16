@@ -1,8 +1,10 @@
-from typing import Optional
-from fastapi import FastAPI
-import httpx
+from fastapi import FastAPI, HTTPException
+
+from provider.met_provider import MetProvider
+from service.search_service import SearchService
 
 app = FastAPI()
+search_service = SearchService(MetProvider('https://collectionapi.metmuseum.org'))
 
 
 @app.get('/api/search')
@@ -15,16 +17,9 @@ def search(title: str) -> str:
     Returns:
         The url of the primary image of the first search result or 'No results found.' if no search results are found.
     """
-    search_request: httpx.Response = httpx.get(
-        'https://collectionapi.metmuseum.org/public/collection/v1/search',
-        params={'q': title, 'title': True, 'hasImages': True},
-    )
 
-    object_ids: Optional[list[int]] = search_request.json().get('objectIDs')
-
-    if object_ids:
-        object_request = httpx.get(f'https://collectionapi.metmuseum.org/public/collection/v1/objects/{object_ids[0]}')
-        primary_image_url = object_request.json().get('primaryImage')
-        return primary_image_url
-    else:
-        return 'No results found.'
+    try:
+        search_result = search_service.search_by_title(title)
+        return search_result.primary_image
+    except ValueError:
+        raise HTTPException(status_code=404, detail='No results found.')
