@@ -9,3 +9,4 @@ The corresponding blog posts and branches are as follows:
 | ----------- | ----------- |
 | [Delve 6: Let's Build a Modern ML Microservice Application - Part 1](https://www.datadelver.com/software%20engineering/2025/01/26/ml-micro-part-one.html) | [part-one](https://github.com/DataDelver/modern-ml-microservices/tree/part-one) |
 | [Delve 7: Let's Build a Modern ML Microservice Application - Part 2, The Data Layer](https://www.datadelver.com/software%20engineering/2025/02/05/ml-micro-part-two.html) | [part-two](https://github.com/DataDelver/modern-ml-microservices/tree/part-two) |
+| [Delve 8: Let's Build a Modern ML Microservice Application - Part 3, The Business Logic and Interface Layers](https://www.datadelver.com/software%20engineering/2025/02/16/ml-micro-part-three.html) | [part-three](https://github.com/DataDelver/modern-ml-microservices/tree/part-three) |
