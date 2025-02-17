@@ -1,1 +1,11 @@
-met_api_url: https://collectionapi.metmuseum.org
+default: &default
+  met_api_url: https://collectionapi.metmuseum.org
+
+dev: &dev
+  <<: *default
+
+qa: &qa
+  <<: *default
+
+prod: &prod
+  <<: *default

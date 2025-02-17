@@ -1,12 +1,19 @@
 from functools import lru_cache
 import pathlib
 from typing import Tuple, Type
+from pydantic import BaseModel
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict, YamlConfigSettingsSource
-from pydantic.alias_generators import to_camel
 
 
-class Settings(BaseSettings):
+class Settings(BaseModel):
     met_api_url: str
+
+
+class Config(BaseSettings):
+    default: Settings
+    dev: Settings
+    qa: Settings
+    prod: Settings
     model_config = SettingsConfigDict(yaml_file=pathlib.Path(__file__).parent.resolve() / 'config.yaml')
 
     @classmethod
@@ -28,5 +35,6 @@ class Settings(BaseSettings):
 
 
 @lru_cache
-def load_config_settings() -> Settings:
-    return Settings()
+def load_config_settings(env: str) -> Settings:
+    appconfig = Config()  # type: ignore
+    return getattr(appconfig, env)
