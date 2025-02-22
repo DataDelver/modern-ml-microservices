@@ -1,10 +1,13 @@
+import os
 from fastapi import FastAPI, HTTPException
 
 from provider.met_provider import MetProvider
 from service.search_service import SearchService
+from shared.config.config_loader import load_config_settings
 
 app = FastAPI()
-search_service = SearchService(MetProvider('https://collectionapi.metmuseum.org'))
+app_settings = load_config_settings(os.getenv('ENV', 'dev'))
+search_service = SearchService(MetProvider(app_settings.met_api_url))
 
 
 @app.get('/api/search')
