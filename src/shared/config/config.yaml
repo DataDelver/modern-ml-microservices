@@ -1,0 +1,12 @@
+default: &default 
+  met_api_url: https://collectionapi-dummy.metmuseum.org
+
+dev: 
+  <<: *default 
+
+qa:
+  <<: *default
+
+prod:
+  <<: *default
+  met_api_url: https://collectionapi.metmuseum.org
