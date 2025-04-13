@@ -18,3 +18,35 @@ quote-style = "single"
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+pythonpath = "src"
+testpaths = [
+    "tests",
+]
+python_files = [
+    "test_*.py",
+    "inttest_*.py",
+]
+
+[tool.coverage.run]
+omit = [
+    "tests",
+]
+source = [
+    "src",
+]
+
+[tool.coverage.report]
+fail_under = 60 
+show_missing = true
+skip_empty = true
+
+[dependency-groups]
+dev = [
+    "pytest-cov>=6.0.0",
+    "pytest>=8.3.5",
+    "pytest-mock>=3.14.0",
+    "pytest-httpx>=0.35.0",
+]
