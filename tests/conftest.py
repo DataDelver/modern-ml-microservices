@@ -1,15 +1,13 @@
 import pytest
 
 from provider.met_provider import MetProvider
-from shared.config.config_loader import Settings
-
-
-dummy_url = 'https://collectionapi-dummy.metmuseum.org'
 
 
 @pytest.fixture
 def provider_with_mock_api(httpx_mock) -> MetProvider:
     """Mock responses for the Metropolitan Museum of Art API."""
+
+    dummy_url = 'https://collectionapi-dummy.metmuseum.org'
 
     # Mock the response for the get_objects method
     httpx_mock.add_response(
