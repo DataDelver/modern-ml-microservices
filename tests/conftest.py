@@ -7,15 +7,6 @@ from shared.config.config_loader import Settings
 dummy_url = 'https://collectionapi-dummy.metmuseum.org'
 
 
-@pytest.fixture(autouse=True)
-def mock_app_settings(mocker):
-    """Mock the app settings for all tests."""
-
-    mock_settings = mocker.MagicMock(Settings)
-    mock_settings.met_api_url = dummy_url
-    mocker.patch('main.app_settings', mock_settings)
-
-
 @pytest.fixture
 def provider_with_mock_api(httpx_mock) -> MetProvider:
     """Mock responses for the Metropolitan Museum of Art API."""

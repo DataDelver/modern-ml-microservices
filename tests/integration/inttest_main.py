@@ -29,15 +29,20 @@ def test_search(search_service: SearchService, mocker: MockerFixture) -> None:
     assert response.json() == 'https://example.com/image.jpg'
 
 
-def test_search_no_results(search_service: SearchService, mocker: MockerFixture) -> None:
+def test_search_no_results(search_service: SearchService, mocker: MockerFixture, httpx_mock) -> None:
     """Test the search endpoint when no results are found."""
 
     # GIVEN
     client = TestClient(app)
     mocker.patch('main.search_service', search_service)
-    mock_search = mocker.patch.object(search_service, 'search_by_title')
-    mock_search.side_effect = ValueError('No results found.')
-    title = 'Test Title'
+    httpx_mock.add_response(
+        url=f'{search_service.met_provider.base_url}/public/collection/v1/search?q=Test No Results Title',
+        json={
+            'total': 0,
+            'objectIDs': [],
+        },
+    )
+    title = 'Test No Results Title'
 
     # WHEN
     response = client.get(f'/api/search?title={title}')
