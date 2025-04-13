@@ -4,20 +4,21 @@ from provider.met_provider import MetProvider
 from shared.config.config_loader import Settings
 
 
+dummy_url = 'https://collectionapi-dummy.metmuseum.org'
+
+
 @pytest.fixture(autouse=True)
 def mock_app_settings(mocker):
     """Mock the app settings for all tests."""
 
     mock_settings = mocker.MagicMock(Settings)
-    mock_settings.met_api_url = 'https://collectionapi-dummy.metmuseum.org'
+    mock_settings.met_api_url = dummy_url
     mocker.patch('main.app_settings', mock_settings)
 
 
 @pytest.fixture
-def mocked_provider(httpx_mock) -> MetProvider:
+def provider_with_mock_api(httpx_mock) -> MetProvider:
     """Mock responses for the Metropolitan Museum of Art API."""
-
-    dummy_url = 'https://collectionapi-dummy.metmuseum.org'
 
     # Mock the response for the get_objects method
     httpx_mock.add_response(

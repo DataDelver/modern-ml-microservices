@@ -8,9 +8,9 @@ from service.search_service import SearchService
 
 
 @pytest.fixture
-def search_service(mocked_provider: MetProvider) -> SearchService:
+def search_service(provider_with_mock_api: MetProvider) -> SearchService:
     """Fixture to provide a mocked SearchService instance."""
-    return SearchService(mocked_provider)
+    return SearchService(provider_with_mock_api)
 
 
 def test_search(search_service: SearchService, mocker: MockerFixture) -> None:
