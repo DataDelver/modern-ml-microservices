@@ -6,8 +6,5 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = []
 
-[tool.uv.sources]
-housing-price-model = { workspace = true }
-
 [tool.uv.workspace]
-members = ["housing-price-service", "housing-price-model"]
+members = ["housing-price-model"]
