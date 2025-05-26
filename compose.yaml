@@ -1,0 +1,7 @@
+services:
+  model:
+    image: house-price-model:latest
+    ports:
+      - "8090:8080"
+      - "8091:8081"
+      - "8092:8082"
