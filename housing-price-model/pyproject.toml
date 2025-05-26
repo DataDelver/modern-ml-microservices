@@ -1,7 +1,7 @@
 [project]
 name = "housing-price-model"
 version = "0.1.0"
-description = "Example repository of how to build a modern microservice architecture to support machine learning applications."
+description = "Example repository of how to build a price regression model."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
