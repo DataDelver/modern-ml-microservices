@@ -1216,6 +1216,12 @@ wheels = [
 name = "modern-ml-microservices"
 version = "0.1.0"
 source = { virtual = "." }
+dependencies = [
+    { name = "mlflow" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "mlflow", specifier = ">=2.22.0" }]
 
 [[package]]
 name = "narwhals"
