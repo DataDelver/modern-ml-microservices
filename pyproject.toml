@@ -5,48 +5,8 @@ description = "Example repository of how to build a modern microservice architec
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "fastapi[standard]>=0.115.6",
-    "httpx>=0.28.1",
-    "pydantic-settings>=2.7.1",
+    "mlflow>=2.22.0",
 ]
 
-[tool.ruff]
-line-length = 120
-
-[tool.ruff.format]
-quote-style = "single"
-
-[tool.ruff.lint.pydocstyle]
-convention = "google"
-
-[tool.pytest.ini_options]
-minversion = "6.0"
-pythonpath = "src"
-testpaths = [
-    "tests",
-]
-python_files = [
-    "test_*.py",
-    "inttest_*.py",
-]
-
-[tool.coverage.run]
-omit = [
-    "tests",
-]
-source = [
-    "src",
-]
-
-[tool.coverage.report]
-fail_under = 60 
-show_missing = true
-skip_empty = true
-
-[dependency-groups]
-dev = [
-    "pytest-cov>=6.0.0",
-    "pytest>=8.3.5",
-    "pytest-mock>=3.14.0",
-    "pytest-httpx>=0.35.0",
-]
+[tool.uv.workspace]
+members = ["housing-price-model"]
