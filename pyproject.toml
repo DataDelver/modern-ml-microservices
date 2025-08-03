@@ -9,4 +9,27 @@ dependencies = [
 ]
 
 [tool.uv.workspace]
-members = ["housing-price-model"]
+members = ["housing-price-model", "housing-price-orchestrator"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+
+[tool.coverage.run]
+omit = [
+    "tests",
+]
+source = [
+    "src",
+]
+
+[tool.coverage.report]
+fail_under = 60 
+show_missing = true
+skip_empty = true
