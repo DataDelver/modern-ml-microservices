@@ -1,7 +1,16 @@
 services:
-  model:
+  housing-price-model:
     image: house-price-model:latest
     ports:
       - "8080:8080"
-      - "8081:8081"
-      - "8082:8082"
+  housing-price-orchestrator:
+    build: 
+      context: housing-price-orchestrator
+      additional_contexts:
+        project_root: .
+    environment:
+      - ENV=dev
+    ports:
+      - "8000:8000"
+    depends_on:
+      - housing-price-model

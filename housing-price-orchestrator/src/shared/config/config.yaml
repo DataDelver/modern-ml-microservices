@@ -1,5 +1,5 @@
 default: &default 
-  met_api_url: https://collectionapi-dummy.metmuseum.org
+  pricing_model_url: http://housing-price-model:8080
 
 dev: 
   <<: *default 
@@ -9,4 +9,3 @@ qa:
 
 prod:
   <<: *default
-  met_api_url: https://collectionapi.metmuseum.org

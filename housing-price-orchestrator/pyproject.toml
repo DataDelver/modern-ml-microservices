@@ -5,8 +5,9 @@ description = "Example repository of how to orchestrate a price regression model
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "fastapi[standard]>=0.115.6",
+    "fastapi[standard]>=0.116.1",
     "httpx>=0.28.1",
+    "pandas>=2.3.1",
     "pydantic-settings>=2.7.1",
 ]
 

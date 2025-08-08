@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, Settings
 
 
 class Settings(BaseModel):
-    met_api_url: str
+    pricing_model_url: str
 
 
 class Config(BaseSettings):

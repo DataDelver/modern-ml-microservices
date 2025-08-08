@@ -1,0 +1,11 @@
+__pycache__
+.pytest_cache
+.venv
+.vscode
+deployment
+tests
+.env
+.gitignore
+.git
+LICENSE
+README.md
