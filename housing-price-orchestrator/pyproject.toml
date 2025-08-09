@@ -8,18 +8,7 @@ dependencies = [
     "fastapi[standard]>=0.116.1",
     "httpx>=0.28.1",
     "pandas>=2.3.1",
-    "pydantic-settings>=2.7.1",
-]
-
-[tool.pytest.ini_options]
-minversion = "6.0"
-pythonpath = "src"
-testpaths = [
-    "tests",
-]
-python_files = [
-    "test_*.py",
-    "inttest_*.py",
+    "pydantic-settings>=2.10.1",
 ]
 
 [dependency-groups]

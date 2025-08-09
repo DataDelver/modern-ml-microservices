@@ -779,7 +779,7 @@ requires-dist = [
     { name = "fastapi", extras = ["standard"], specifier = ">=0.116.1" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "pandas", specifier = ">=2.3.1" },
-    { name = "pydantic-settings", specifier = ">=2.7.1" },
+    { name = "pydantic-settings", specifier = ">=2.10.1" },
 ]
 
 [package.metadata.requires-dev]

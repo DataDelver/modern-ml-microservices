@@ -20,13 +20,25 @@ quote-style = "single"
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
+[tool.pytest.ini_options]
+minversion = "6.0"
+pythonpath = [
+    "housing-price-orchestrator/src"
+]
+testpaths = [
+    "housing-price-orchestrator/tests",
+]
+python_files = [
+    "test_*.py",
+    "inttest_*.py",
+]
 
 [tool.coverage.run]
 omit = [
-    "tests",
+    "housing-price-orchestrator/tests",
 ]
 source = [
-    "src",
+    "housing-price-orchestrator/src",
 ]
 
 [tool.coverage.report]
