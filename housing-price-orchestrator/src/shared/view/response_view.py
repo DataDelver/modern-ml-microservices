@@ -12,7 +12,7 @@ class PricePredictionResponseView(ViewBase):
     """Predicted price of the housing unit."""
 
 
-class BatchPricePredictionResponseView(ViewBase):
+class PricePredictionBatchResponseView(ViewBase):
     """View model for the response from the housing price orchestrator for batch predictions."""
 
     predictions: list[PricePredictionResponseView]
