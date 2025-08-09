@@ -16,6 +16,7 @@ def mock_model_provider(mocker: MockerFixture) -> MagicMock:
 
 def test_predict_price_success(mock_model_provider: MagicMock) -> None:
     """Test the predict_price method of the PricingService class."""
+    # GIVEN
     service = PricingService(mock_model_provider)
     req = PricePredictionRequest(
         id=1,
@@ -80,7 +81,11 @@ def test_predict_price_success(mock_model_provider: MagicMock) -> None:
         sale_type='WD',
         sale_condition='Normal',
     )
+
+    # WHEN
     result = service.predict_price(req)
+
+    # THEN
     assert isinstance(result, PricePrediction)
     assert result.id == 1
     assert result.predicted_price == 123456.78
@@ -89,6 +94,7 @@ def test_predict_price_success(mock_model_provider: MagicMock) -> None:
 
 def test_predict_price_no_prediction(mock_model_provider: MagicMock) -> None:
     """Test the predict_price method when no predictions are returned."""
+    # GIVEN
     service = PricingService(mock_model_provider)
     mock_model_provider.predict.return_value = MagicMock(predictions=[])
     req = PricePredictionRequest(
@@ -154,6 +160,8 @@ def test_predict_price_no_prediction(mock_model_provider: MagicMock) -> None:
         sale_type='WD',
         sale_condition='Normal',
     )
+
+    # WHEN / THEN
     with pytest.raises(ValueError, match='No predictions returned from the model.'):
         service.predict_price(req)
     mock_model_provider.predict.assert_called_once()
@@ -161,6 +169,7 @@ def test_predict_price_no_prediction(mock_model_provider: MagicMock) -> None:
 
 def test_predict_price_batch_success(mock_model_provider: MagicMock) -> None:
     """Test the predict_price_batch method of the PricingService class."""
+    # GIVEN
     service = PricingService(mock_model_provider)
     req1 = PricePredictionRequest(
         id=1,
@@ -289,7 +298,11 @@ def test_predict_price_batch_success(mock_model_provider: MagicMock) -> None:
         sale_condition='Normal',
     )
     batch_req = PricePredictionBatchRequest(data=[req1, req2])
+
+    # WHEN
     result = service.predict_price_batch(batch_req)
+
+    # THEN
     assert isinstance(result, list)
     assert len(result) == 2
     assert result[0].id == 1
@@ -301,6 +314,7 @@ def test_predict_price_batch_success(mock_model_provider: MagicMock) -> None:
 
 def test_predict_price_batch_no_predictions(mock_model_provider: MagicMock) -> None:
     """Test the predict_price_batch method when no predictions are returned."""
+    # GIVEN
     service = PricingService(mock_model_provider)
     mock_model_provider.predict.return_value = MagicMock(predictions=[])
     req1 = PricePredictionRequest(
@@ -367,6 +381,8 @@ def test_predict_price_batch_no_predictions(mock_model_provider: MagicMock) -> N
         sale_condition='Normal',
     )
     batch_req = PricePredictionBatchRequest(data=[req1])
+
+    # WHEN / THEN
     with pytest.raises(ValueError, match='No predictions returned from the model.'):
         service.predict_price_batch(batch_req)
     mock_model_provider.predict.assert_called_once()

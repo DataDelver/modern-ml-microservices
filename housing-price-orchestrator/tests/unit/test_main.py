@@ -5,8 +5,6 @@ from pytest_mock import MockerFixture
 
 from main import app
 from service.pricing_service import PricingService
-from shared.view.request_view import PricePredictionRequest, PricePredictionBatchRequest
-from shared.view.response_view import PricePredictionResponseView, PricePredictionBatchResponseView
 
 
 @pytest.fixture
@@ -23,6 +21,7 @@ def mock_pricing_service(mocker: MockerFixture) -> MagicMock:
 
 def test_predict_price_success(mock_pricing_service: MagicMock, mocker: MockerFixture) -> None:
     """Test the /api/v1/price/predict endpoint for a successful prediction."""
+    # GIVEN
     client = TestClient(app)
     mocker.patch('main.pricing_service', mock_pricing_service)
     payload = {
@@ -88,7 +87,11 @@ def test_predict_price_success(mock_pricing_service: MagicMock, mocker: MockerFi
         'sale_type': 'WD',
         'sale_condition': 'Normal',
     }
+
+    # WHEN
     response = client.post('/api/v1/price/predict', json=payload)
+
+    # THEN
     assert response.status_code == 200
     assert response.json() == {'id': 1, 'predictedPrice': 123456.78}
     mock_pricing_service.predict_price.assert_called_once()
@@ -96,6 +99,7 @@ def test_predict_price_success(mock_pricing_service: MagicMock, mocker: MockerFi
 
 def test_predict_price_not_found(mock_pricing_service: MagicMock, mocker: MockerFixture) -> None:
     """Test the /api/v1/price/predict endpoint when no result is found."""
+    # GIVEN
     client = TestClient(app)
     mocker.patch('main.pricing_service', mock_pricing_service)
     mock_pricing_service.predict_price.side_effect = ValueError('No results found.')
@@ -162,7 +166,11 @@ def test_predict_price_not_found(mock_pricing_service: MagicMock, mocker: Mocker
         'sale_type': 'WD',
         'sale_condition': 'Normal',
     }
+
+    # WHEN
     response = client.post('/api/v1/price/predict', json=payload)
+
+    # THEN
     assert response.status_code == 404
     assert response.json() == {'detail': 'No results found.'}
     mock_pricing_service.predict_price.assert_called_once()
@@ -170,6 +178,7 @@ def test_predict_price_not_found(mock_pricing_service: MagicMock, mocker: Mocker
 
 def test_batch_predict_success(mock_pricing_service: MagicMock, mocker: MockerFixture) -> None:
     """Test the /api/v1/price/predict/batch endpoint for a successful batch prediction."""
+    # GIVEN
     client = TestClient(app)
     mocker.patch('main.pricing_service', mock_pricing_service)
     payload = {
@@ -302,7 +311,11 @@ def test_batch_predict_success(mock_pricing_service: MagicMock, mocker: MockerFi
             },
         ]
     }
+
+    # WHEN
     response = client.post('/api/v1/price/predict/batch', json=payload)
+
+    # THEN
     assert response.status_code == 200
     assert response.json() == {
         'predictions': [{'id': 1, 'predictedPrice': 123456.78}, {'id': 2, 'predictedPrice': 234567.89}]
@@ -312,6 +325,7 @@ def test_batch_predict_success(mock_pricing_service: MagicMock, mocker: MockerFi
 
 def test_batch_predict_not_found(mock_pricing_service: MagicMock, mocker: MockerFixture) -> None:
     """Test the /api/v1/price/predict/batch endpoint when no result is found."""
+    # GIVEN
     client = TestClient(app)
     mocker.patch('main.pricing_service', mock_pricing_service)
     mock_pricing_service.predict_price_batch.side_effect = ValueError('No results found.')
@@ -382,6 +396,10 @@ def test_batch_predict_not_found(mock_pricing_service: MagicMock, mocker: Mocker
             }
         ]
     }
+
+    # WHEN
     response = client.post('/api/v1/price/predict/batch', json=payload)
+
+    # THEN
     assert response.status_code == 404
     assert response.json() == {'detail': 'No results found.'}
