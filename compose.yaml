@@ -1,6 +1,8 @@
 services:
   housing-price-model:
-    image: house-price-model:latest
+    build:
+      context: housing-price-model/build
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
       - "8081:8081"
