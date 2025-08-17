@@ -1,5 +1,6 @@
 import os
 from fastapi import FastAPI, HTTPException
+import httpx
 from service.pricing_service import PricingService
 from provider.mlflow_model_provider import MLFlowModelProvider
 from shared.config.config_loader import load_config_settings
@@ -8,7 +9,10 @@ from shared.view.response_view import PricePredictionBatchResponseView, PricePre
 
 app = FastAPI()
 app_settings = load_config_settings(os.getenv('ENV', 'dev'))
-pricing_service = PricingService(MLFlowModelProvider(app_settings.pricing_model_url))
+
+# Initialize HTTP client
+client = httpx.Client()
+pricing_service = PricingService(MLFlowModelProvider(app_settings.pricing_model_url, client))
 
 
 @app.post('/api/v1/price/predict')
