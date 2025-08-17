@@ -9,4 +9,39 @@ dependencies = [
 ]
 
 [tool.uv.workspace]
-members = ["housing-price-model"]
+members = ["housing-price-model", "housing-price-orchestrator"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+pythonpath = [
+    "housing-price-orchestrator/src"
+]
+testpaths = [
+    "housing-price-orchestrator/tests",
+]
+python_files = [
+    "test_*.py",
+    "inttest_*.py",
+]
+
+[tool.coverage.run]
+omit = [
+    "housing-price-orchestrator/tests",
+]
+source = [
+    "housing-price-orchestrator/src",
+]
+
+[tool.coverage.report]
+fail_under = 60 
+show_missing = true
+skip_empty = true

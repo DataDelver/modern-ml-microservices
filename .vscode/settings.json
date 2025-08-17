@@ -1,0 +1,8 @@
+{
+    "python.autoComplete.extraPaths": [
+        "${workspaceFolder}/housing-price-orchestrator/src"
+    ],
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/housing-price-orchestrator/src"
+    ]
+}

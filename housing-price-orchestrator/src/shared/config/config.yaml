@@ -1,0 +1,11 @@
+default: &default 
+  pricing_model_url: http://housing-price-model:8080
+
+dev: 
+  <<: *default 
+
+qa:
+  <<: *default
+
+prod:
+  <<: *default

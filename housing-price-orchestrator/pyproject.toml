@@ -1,0 +1,20 @@
+[project]
+name = "housing-price-orchestrator"
+version = "0.1.0"
+description = "Example repository of how to orchestrate a price regression model."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard]>=0.116.1",
+    "httpx>=0.28.1",
+    "pandas>=2.3.1",
+    "pydantic-settings>=2.10.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest-cov>=6.0.0",
+    "pytest>=8.3.5",
+    "pytest-mock>=3.14.0",
+    "pytest-httpx>=0.35.0",
+]
