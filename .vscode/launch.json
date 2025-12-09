@@ -5,13 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Python File",
+            "name": "Python Debugger: FastAPI",
             "type": "debugpy",
             "request": "launch",
-            "program": "${file}",
+            "module": "uvicorn",
+            "args": [
+                "main:app",
+                "--reload"
+            ],
+            "jinja": true,
+            "cwd": "${workspaceFolder}/housing-price-orchestrator/src",
             "env": {
-                "PYTHONPATH": "${workspaceFolder}/housing-price-orchestrator/src"
-            }
+                "PYTHONPATH": "${cwd}:${env:PYTHONPATH}"
+            },
         }
     ]
 }
