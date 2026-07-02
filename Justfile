@@ -62,6 +62,16 @@ format-check:
     echo "🧐 Checking formatting..."
     uv run ruff format --check .
 
+# Pre-commit hooks
+pre-commit-install:
+    echo "🔧 Installing pre-commit hooks..."
+    pre-commit install
+
+pre-commit:
+    echo "🚀 Running pre-commit hooks..."
+    pre-commit run --all-files
+
+
 # Run tests, linting, and formatting check
-check: lint format-check test
+check: lint format-check test pre-commit
     echo "🎉 All checks passed!"
