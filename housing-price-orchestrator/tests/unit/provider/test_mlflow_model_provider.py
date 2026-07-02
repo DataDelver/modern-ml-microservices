@@ -39,7 +39,6 @@ def test_predict_success(mocker):
     mock_client = MagicMock()
     provider = MLFlowModelProvider(base_url='http://fake-url', client=mock_client)
     df = pd.DataFrame([{'a': 1, 'b': 2}])
-    expected_payload = {'dataframe_split': df.to_dict(orient='split')}
     mock_response = MagicMock()
     mock_response.json.return_value = {'predictions': [123.45]}
     mock_client.post.return_value = mock_response
