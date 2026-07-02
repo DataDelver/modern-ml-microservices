@@ -27,7 +27,7 @@ def resolve_env_vars(data: Any) -> Any:
         return [resolve_env_vars(item) for item in data]
     elif isinstance(data, str):
         # Matches ${VAR_NAME} or ${VAR_NAME:default_value}
-        pattern = r"\$\{([^:]+)(?::([^}]+))?\}"
+        pattern = r'\$\{([^:]+)(?::([^}]+))?\}'
 
         def replace_match(match: re.Match) -> str:
             var_name = match.group(1)
@@ -37,10 +37,11 @@ def resolve_env_vars(data: Any) -> Any:
                 return os.getenv(var_name, default_value)
             else:
                 val = os.getenv(var_name)
-                return val if val is not None else ""
+                return val if val is not None else ''
 
         return re.sub(pattern, replace_match, data)
     return data
+
 
 class Settings(BaseModel):
     pricing_model_url: str
@@ -51,6 +52,7 @@ class Settings(BaseModel):
         if isinstance(data, dict):
             return resolve_env_vars(data)
         return data
+
 
 class Config(BaseSettings):
     default: Settings
@@ -73,6 +75,7 @@ class Config(BaseSettings):
             file_secret_settings,
             YamlConfigSettingsSource(settings_cls),
         )
+
 
 @lru_cache
 def load_config_settings(env: str) -> Settings:
