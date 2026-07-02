@@ -1,6 +1,17 @@
 # modern-ml-microservices
 Example repository of how to build a modern microservice architecture to support machine learning applications.
 
+```mermaid
+graph TD
+    Client[Client] --> Orchestrator[Orchestrator Service]
+    subgraph "Orchestrator Service"
+        Orchestrator --> Service[Pricing Service]
+        Service --> Provider[MLFlow Model Provider]
+    end
+    Provider --> MLFlow[MLFlow Server]
+    MLFlow --- Models[(Model Registry)]
+```
+
 The [main](https://github.com/DataDelver/modern-ml-microservices) branch of this repo will always show the latest version of this repo, with each part contained on it's own branch.
 
 The corresponding blog posts and branches are as follows:
