@@ -9,3 +9,6 @@ qa:
 
 prod:
   <<: *default
+
+local:
+  <<: *default

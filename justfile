@@ -20,7 +20,7 @@ build:
 # Spin up Docker containers
 up:
     echo "🚀 Spinning up Docker containers and attaching to logs..."
-    docker compose up -d && docker compose logs -f
+    docker compose up -d --build --remove-orphans && docker compose logs -f
 
 # Tear down Docker containers
 down:

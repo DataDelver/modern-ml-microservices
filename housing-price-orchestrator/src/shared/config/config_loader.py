@@ -59,6 +59,7 @@ class Config(BaseSettings):
     dev: Settings
     qa: Settings
     prod: Settings
+    local: Settings
     model_config = SettingsConfigDict(yaml_file=pathlib.Path(__file__).parent.resolve() / 'config.yaml')
 
     @classmethod
