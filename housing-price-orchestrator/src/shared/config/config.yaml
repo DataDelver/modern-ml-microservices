@@ -1,11 +1,14 @@
-default: &default 
-  pricing_model_url: http://housing-price-model:8080
+default: &default
+  pricing_model_url: ${MODEL_URL:http://housing-price-model:8080}
 
-dev: 
-  <<: *default 
+dev:
+  <<: *default
 
 qa:
   <<: *default
 
 prod:
+  <<: *default
+
+local:
   <<: *default

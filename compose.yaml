@@ -13,7 +13,7 @@ services:
       additional_contexts:
         project_root: .
     environment:
-      - ENV=dev
+      - ENV=${ENV}
     ports:
       - "8000:8000"
     depends_on:
