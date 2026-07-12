@@ -1,0 +1,25 @@
+[project]
+name = "housing-price-ui"
+version = "0.1.0"
+description = "Streamlit UI for the housing price prediction orchestrator."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "streamlit>=1.40.0",
+    "httpx>=0.28.1",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.10.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest-asyncio>=0.25.0",
+    "pytest-cov>=6.0.0",
+    "pytest>=8.3.5",
+    "pytest-mock>=3.14.0",
+    "pytest-httpx>=0.35.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+pythonpath = ["src"]

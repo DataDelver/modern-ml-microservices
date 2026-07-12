@@ -18,3 +18,14 @@ services:
       - "8000:8000"
     depends_on:
       - housing-price-model
+  housing-price-ui:
+    build:
+      context: housing-price-ui
+      additional_contexts:
+        project_root: .
+    environment:
+      - ORCHESTRATOR_URL=http://housing-price-orchestrator:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      - housing-price-orchestrator
