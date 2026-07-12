@@ -9,27 +9,27 @@ class MLFlowModelProvider:
     """Provider for interacting with MLFlow models.
 
     Args:
-        model_uri: The URI of the MLFlow model.
-        client: An optional httpx client for making requests. If not provided, a new client will be created.
+        base_url: The URI of the MLFlow model.
+        client: An optional httpx.AsyncClient for making requests. If not provided, a new client will be created.
     """
 
-    def __init__(self, base_url: str, client: Optional[httpx.Client] = None):
+    def __init__(self, base_url: str, client: Optional[httpx.AsyncClient] = None):
         self.base_url = base_url
-        self.client = client or httpx.Client()
+        self.client = client or httpx.AsyncClient()
 
-    def health(self) -> bool:
+    async def health(self) -> bool:
         """Checks the health of the MLFlow model provider.
 
         Returns:
-            A string indicating the health status of the model provider.
+            True if the model provider is healthy, False otherwise.
         """
         try:
-            response = httpx.get(f'{self.base_url}/ping')
+            response = await self.client.get(f'{self.base_url}/ping')
             return response.status_code == 200
         except httpx.RequestError:
             return False
 
-    def predict(self, data: pd.DataFrame) -> MLFlowPredictionsView:
+    async def predict(self, data: pd.DataFrame) -> MLFlowPredictionsView:
         """Makes a prediction using the MLFlow model.
 
         Args:
@@ -44,8 +44,12 @@ class MLFlowModelProvider:
 
         payload = {'dataframe_split': json.loads(data.to_json(orient='split'))}
 
-        response = self.client.post(f'{self.base_url}/invocations', json=payload)
+        response = await self.client.post(f'{self.base_url}/invocations', json=payload)
         response.raise_for_status()
 
         predictions = response.json()
         return MLFlowPredictionsView.model_validate(predictions)
+
+    async def close(self) -> None:
+        """Closes the underlying async HTTP client."""
+        await self.client.aclose()
