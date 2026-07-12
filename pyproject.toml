@@ -9,7 +9,7 @@ dependencies = [
 ]
 
 [tool.uv.workspace]
-members = ["housing-price-model", "housing-price-orchestrator"]
+members = ["housing-price-model", "housing-price-orchestrator", "housing-price-ui"]
 
 [tool.ruff]
 line-length = 120
