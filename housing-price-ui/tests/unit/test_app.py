@@ -94,3 +94,24 @@ class TestBuildPredictionRequest:
         assert request.ms_sub_class == sample['data']['ms_sub_class']
         assert request.overall_qual == sample['data']['overall_qual']
         assert request.gr_liv_area == sample['data']['gr_liv_area']
+
+
+class TestPredictPrice:
+    async def test_predict_price_returns_response(self):
+        from unittest.mock import AsyncMock, patch
+
+        from models.prediction_models import PricePredictionResponse
+        from ui.app import predict_price
+
+        samples = load_samples()
+        request = build_prediction_request(samples[0]['data'], request_id=samples[0]['id'])
+        expected = PricePredictionResponse(id=samples[0]['id'], predicted_price=250000.0)
+
+        with patch('ui.app.OrchestratorClient') as mock_client_cls:
+            mock_client = mock_client_cls.return_value
+            mock_client.__aenter__.return_value = mock_client
+            mock_client.predict = AsyncMock(return_value=expected)
+            result = await predict_price(request)
+
+            assert result.predicted_price == 250000.0
+            mock_client.predict.assert_awaited_once()

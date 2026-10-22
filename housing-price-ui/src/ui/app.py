@@ -1,5 +1,6 @@
 """Streamlit UI for housing price prediction using sample properties."""
 
+import asyncio
 import json
 from pathlib import Path
 
@@ -7,7 +8,10 @@ import streamlit as st
 
 from config.settings import UIConfigSettings
 from client.orchestrator_client import OrchestratorClient
-from models.prediction_models import PricePredictionRequest
+from models.prediction_models import (
+    PricePredictionRequest,
+    PricePredictionResponse,
+)
 
 # ---------------------------------------------------------------------------
 # Data loading
@@ -118,15 +122,16 @@ def render_full_details(sample_data: dict):
 # ---------------------------------------------------------------------------
 
 
+async def predict_price(request: PricePredictionRequest) -> PricePredictionResponse:
+    """Create a client for this event loop, predict, and clean up."""
+    settings = UIConfigSettings()
+    async with OrchestratorClient(base_url=settings.orchestrator_url) as client:
+        return await client.predict(request)
+
+
 def main():
     st.set_page_config(page_title='Housing Price Predictor', layout='wide')
     st.title('Housing Price Prediction')
-
-    # Lazily create the orchestrator client once per session
-    if 'client' not in st.session_state:
-        settings = UIConfigSettings()
-        st.session_state.client = OrchestratorClient(base_url=settings.orchestrator_url)
-    client = st.session_state.client
 
     # Load samples
     samples = load_samples()
@@ -171,7 +176,9 @@ def main():
         request = build_prediction_request(sample_data, request_id=request_id)
 
         with st.spinner('Predicting price...'):
-            result = client.predict(request)
+            # Streamlit's script runner keeps a persistent, non-running event
+            # loop for the script thread, so asyncio.run() is safe on rerun.
+            result = asyncio.run(predict_price(request))
 
         st.success(f'**Predicted Price:** {format_price(result.predicted_price)}')
 
