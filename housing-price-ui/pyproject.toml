@@ -5,7 +5,7 @@ description = "Streamlit UI for the housing price prediction orchestrator."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "streamlit>=1.40.0",
+    "streamlit>=1.65.0",
     "httpx>=0.28.1",
     "pydantic>=2.10.0",
     "pydantic-settings>=2.10.1",
