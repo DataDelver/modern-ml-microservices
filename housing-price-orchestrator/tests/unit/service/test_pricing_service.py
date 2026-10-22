@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock
+from unittest.mock import AsyncMock, MagicMock
 import pytest
 from pytest_mock import MockerFixture
 
@@ -9,12 +9,13 @@ from shared.dto.price_prediction import PricePrediction
 
 @pytest.fixture
 def mock_model_provider(mocker: MockerFixture) -> MagicMock:
-    mock = mocker.MagicMock()
-    mock.predict.return_value = MagicMock(predictions=[123456.78, 234567.89])
+    mock = MagicMock()
+    mock.predict = AsyncMock(return_value=MagicMock(predictions=[123456.78, 234567.89]))
     return mock
 
 
-def test_predict_price_success(mock_model_provider: MagicMock) -> None:
+@pytest.mark.asyncio
+async def test_predict_price_success(mock_model_provider: MagicMock) -> None:
     """Test the predict_price method of the PricingService class."""
     # GIVEN
     service = PricingService(mock_model_provider)
@@ -83,20 +84,21 @@ def test_predict_price_success(mock_model_provider: MagicMock) -> None:
     )
 
     # WHEN
-    result = service.predict_price(req)
+    result = await service.predict_price(req)
 
     # THEN
     assert isinstance(result, PricePrediction)
     assert result.id == 1
     assert result.predicted_price == 123456.78
-    mock_model_provider.predict.assert_called_once()
+    mock_model_provider.predict.assert_awaited_once()
 
 
-def test_predict_price_no_prediction(mock_model_provider: MagicMock) -> None:
+@pytest.mark.asyncio
+async def test_predict_price_no_prediction(mock_model_provider: MagicMock) -> None:
     """Test the predict_price method when no predictions are returned."""
     # GIVEN
     service = PricingService(mock_model_provider)
-    mock_model_provider.predict.return_value = MagicMock(predictions=[])
+    mock_model_provider.predict = AsyncMock(return_value=MagicMock(predictions=[]))
     req = PricePredictionRequest(
         id=1,
         ms_sub_class=20,
@@ -163,11 +165,12 @@ def test_predict_price_no_prediction(mock_model_provider: MagicMock) -> None:
 
     # WHEN / THEN
     with pytest.raises(ValueError, match='No predictions returned from the model.'):
-        service.predict_price(req)
-    mock_model_provider.predict.assert_called_once()
+        await service.predict_price(req)
+    mock_model_provider.predict.assert_awaited_once()
 
 
-def test_predict_price_batch_success(mock_model_provider: MagicMock) -> None:
+@pytest.mark.asyncio
+async def test_predict_price_batch_success(mock_model_provider: MagicMock) -> None:
     """Test the predict_price_batch method of the PricingService class."""
     # GIVEN
     service = PricingService(mock_model_provider)
@@ -300,7 +303,7 @@ def test_predict_price_batch_success(mock_model_provider: MagicMock) -> None:
     batch_req = PricePredictionBatchRequest(data=[req1, req2])
 
     # WHEN
-    result = service.predict_price_batch(batch_req)
+    result = await service.predict_price_batch(batch_req)
 
     # THEN
     assert isinstance(result, list)
@@ -309,14 +312,15 @@ def test_predict_price_batch_success(mock_model_provider: MagicMock) -> None:
     assert result[0].predicted_price == 123456.78
     assert result[1].id == 2
     assert result[1].predicted_price == 234567.89
-    mock_model_provider.predict.assert_called_once()
+    mock_model_provider.predict.assert_awaited_once()
 
 
-def test_predict_price_batch_no_predictions(mock_model_provider: MagicMock) -> None:
+@pytest.mark.asyncio
+async def test_predict_price_batch_no_predictions(mock_model_provider: MagicMock) -> None:
     """Test the predict_price_batch method when no predictions are returned."""
     # GIVEN
     service = PricingService(mock_model_provider)
-    mock_model_provider.predict.return_value = MagicMock(predictions=[])
+    mock_model_provider.predict = AsyncMock(return_value=MagicMock(predictions=[]))
     req1 = PricePredictionRequest(
         id=1,
         ms_sub_class=20,
@@ -384,5 +388,5 @@ def test_predict_price_batch_no_predictions(mock_model_provider: MagicMock) -> N
 
     # WHEN / THEN
     with pytest.raises(ValueError, match='No predictions returned from the model.'):
-        service.predict_price_batch(batch_req)
-    mock_model_provider.predict.assert_called_once()
+        await service.predict_price_batch(batch_req)
+    mock_model_provider.predict.assert_awaited_once()

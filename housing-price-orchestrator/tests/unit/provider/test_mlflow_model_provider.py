@@ -1,42 +1,49 @@
 import pandas as pd
 import httpx
 import pytest
-from unittest.mock import MagicMock
+from unittest.mock import AsyncMock, MagicMock
 
 from provider.mlflow_model_provider import MLFlowModelProvider
 from shared.view.mlflow_view import MLFlowPredictionsView
 
 
-def test_health_success(mocker):
+@pytest.mark.asyncio
+async def test_health_success(mocker):
     """Test the health method returns True when /ping returns 200."""
     # GIVEN
-    mocker.patch('httpx.get', return_value=MagicMock(status_code=200))
-    provider = MLFlowModelProvider(base_url='http://fake-url')
+    mock_client = AsyncMock()
+    mock_client.get.return_value = MagicMock(status_code=200)
+    provider = MLFlowModelProvider(base_url='http://fake-url', client=mock_client)
 
     # WHEN
-    result = provider.health()
+    result = await provider.health()
 
     # THEN
     assert result is True
+    mock_client.get.assert_awaited_once_with('http://fake-url/ping')
 
 
-def test_health_failure(mocker):
+@pytest.mark.asyncio
+async def test_health_failure(mocker):
     """Test the health method returns False when /ping raises an error."""
     # GIVEN
-    mocker.patch('httpx.get', side_effect=httpx.RequestError('fail'))
-    provider = MLFlowModelProvider(base_url='http://fake-url')
+    mock_client = AsyncMock()
+    mock_client.get.side_effect = httpx.RequestError('fail')
+    provider = MLFlowModelProvider(base_url='http://fake-url', client=mock_client)
 
     # WHEN
-    result = provider.health()
+    result = await provider.health()
 
     # THEN
     assert result is False
+    mock_client.get.assert_awaited_once_with('http://fake-url/ping')
 
 
-def test_predict_success(mocker):
+@pytest.mark.asyncio
+async def test_predict_success(mocker):
     """Test the predict method returns MLFlowPredictionsView on success."""
     # GIVEN
-    mock_client = MagicMock()
+    mock_client = AsyncMock()
     provider = MLFlowModelProvider(base_url='http://fake-url', client=mock_client)
     df = pd.DataFrame([{'a': 1, 'b': 2}])
     mock_response = MagicMock()
@@ -48,18 +55,19 @@ def test_predict_success(mocker):
     )
 
     # WHEN
-    result = provider.predict(df)
+    result = await provider.predict(df)
 
     # THEN
-    mock_client.post.assert_called_once()
+    mock_client.post.assert_awaited_once()
     assert isinstance(result, MLFlowPredictionsView)
     assert result.predictions == [123.45]
 
 
-def test_predict_http_error(mocker):
+@pytest.mark.asyncio
+async def test_predict_http_error(mocker):
     """Test the predict method raises if HTTP error occurs."""
     # GIVEN
-    mock_client = MagicMock()
+    mock_client = AsyncMock()
     provider = MLFlowModelProvider(base_url='http://fake-url', client=mock_client)
     df = pd.DataFrame([{'a': 1, 'b': 2}])
     mock_response = MagicMock()
@@ -70,4 +78,18 @@ def test_predict_http_error(mocker):
 
     # WHEN / THEN
     with pytest.raises(httpx.HTTPStatusError):
-        provider.predict(df)
+        await provider.predict(df)
+
+
+@pytest.mark.asyncio
+async def test_close(mocker):
+    """Test the close method closes the underlying async client."""
+    # GIVEN
+    mock_client = AsyncMock()
+    provider = MLFlowModelProvider(base_url='http://fake-url', client=mock_client)
+
+    # WHEN
+    await provider.close()
+
+    # THEN
+    mock_client.aclose.assert_awaited_once()

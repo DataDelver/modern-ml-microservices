@@ -8,20 +8,20 @@ class PricingService:
     def __init__(self, pricing_model_provider: MLFlowModelProvider):
         self.pricing_model_provider = pricing_model_provider
 
-    def predict_price(self, price_prediction_request: PricePredictionRequest) -> PricePrediction:
+    async def predict_price(self, price_prediction_request: PricePredictionRequest) -> PricePrediction:
         """Predicts the price using the MLFlow model provider.
 
         Args:
-            data: The input data for the prediction.
+            price_prediction_request: The input data for the prediction.
 
         Returns:
-            A view containing the predictions.
+            A PricePrediction containing the predicted price.
         """
 
         input_data = price_prediction_request.model_dump(by_alias=True)
 
         input_df = pd.DataFrame([input_data])
-        predictions = self.pricing_model_provider.predict(input_df)
+        predictions = await self.pricing_model_provider.predict(input_df)
         predicted_price = predictions.predictions[0] if predictions.predictions else None
 
         if predicted_price is None:
@@ -29,19 +29,21 @@ class PricingService:
 
         return PricePrediction(id=price_prediction_request.id, predicted_price=predicted_price)
 
-    def predict_price_batch(self, price_prediction_batch_request: PricePredictionBatchRequest) -> list[PricePrediction]:
+    async def predict_price_batch(
+        self, price_prediction_batch_request: PricePredictionBatchRequest
+    ) -> list[PricePrediction]:
         """Predicts the prices for a batch of requests using the MLFlow model provider.
 
         Args:
             price_prediction_batch_request: The batch request containing multiple price prediction requests.
 
         Returns:
-            A list of views containing the predictions.
+            A list of PricePrediction objects containing the predicted prices.
         """
 
         input_data = price_prediction_batch_request.model_dump(by_alias=True)
         input_df = pd.DataFrame(input_data['data'])
-        predictions = self.pricing_model_provider.predict(input_df)
+        predictions = await self.pricing_model_provider.predict(input_df)
         predicted_prices = predictions.predictions if predictions.predictions else []
 
         if not predicted_prices:
