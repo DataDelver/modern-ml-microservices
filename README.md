@@ -8,19 +8,22 @@ This project demonstrates a production-style ML microservice architecture using 
 
 ```mermaid
 graph TD
-    Client[Client] --> Orchestrator[Orchestrator Service]
+    UI[Web UI - Streamlit] --> Orchestrator[Orchestrator Service]
+    Client[API Client] --> Orchestrator
     subgraph "Orchestrator Service"
-        Orchestrator --> Service[Pricing Service]
-        Service --> Provider[MLFlow Model Provider]
+        Orchestrator --> PricingService[Pricing Service]
+        PricingService --> Provider[MLFlow Model Provider]
     end
-    Provider --> MLFlow[MLFlow Server]
-    MLFlow --- Models[(Model Registry)]
+    Provider --> ModelServer[ML Model Server - MLServer]
+    MLFlowServer[MLflow Server] --- ModelRegistry[(Model Registry)]
+    MLFlowServer -.->|"training / deployment"| ModelServer
 ```
 
 ### Services
 
 | Service | Port | Description |
 |---------|------|-------------|
+| **housing-price-ui** | 8501 | Streamlit web application for interactive housing price predictions |
 | **housing-price-orchestrator** | 8000 | FastAPI REST API that receives prediction requests and orchestrates calls to the model |
 | **housing-price-model** | 8080 | MLflow model server serving a trained scikit-learn regression model via MLServer |
 | **mlflow-server** | — | MLflow tracking server and model registry for experiment tracking and model versioning |
@@ -45,7 +48,10 @@ just up
 just down
 ```
 
-Once running, the orchestrator API is available at `http://localhost:8000`.
+Once running, the services are available at:
+
+- **Web UI:** `http://localhost:8501`
+- **Orchestrator API:** `http://localhost:8000`
 
 ## API Usage
 
@@ -158,6 +164,16 @@ modern-ml-microservices/
 ├── compose.yaml                      # Docker Compose orchestration
 ├── justfile                          # Task runner commands
 ├── pyproject.toml                    # Root workspace configuration
+├── housing-price-ui/                 # Streamlit web UI service
+│   ├── src/
+│   │   ├── main.py                   # Streamlit entry point
+│   │   ├── ui/                       # Streamlit app components
+│   │   ├── client/                   # HTTP client for orchestrator API
+│   │   ├── config/                   # UI configuration and settings
+│   │   └── models/                   # Pydantic request/response models
+│   ├── samples/                      # Sample data for UI exploration
+│   └── tests/
+│       └── unit/                     # Unit tests
 ├── housing-price-orchestrator/       # FastAPI orchestrator service
 │   ├── src/
 │   │   ├── main.py                   # FastAPI app and endpoints
@@ -179,8 +195,10 @@ modern-ml-microservices/
 ## Tech Stack
 
 - **Python 3.13+** with **[uv](https://github.com/astral-sh/uv)** for package management
+- **[Streamlit](https://streamlit.io/)** for the web UI
 - **[FastAPI](https://fastapi.tiangolo.com/)** for the REST API
 - **[Pydantic](https://docs.pydantic.dev/)** for data validation and settings
+- **[httpx](https://www.python-httpx.org/)** for HTTP client communication
 - **[MLflow](https://mlflow.org/) + MLServer** for model serving and tracking
 - **[scikit-learn](https://scikit-learn.org/)** for the regression model
 - **[Ruff](https://docs.astral.sh/ruff/)** for linting and formatting

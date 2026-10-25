@@ -65,6 +65,7 @@ class PricePredictionRequest(ViewBase):
         'StoneBr',
         'Timber',
         'Veend',
+        'Veenker',
         'Whitstr',
         'ClearCr',
         'CollgCr',
